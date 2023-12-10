@@ -132,7 +132,7 @@ export class AuthService {
             }
         })
         if(!student) throw new NotFoundException(
-            "User with this username already exists"
+            "User not found"
             )
         const isValid = await verify(student.password, 
             dto.password)
@@ -148,7 +148,7 @@ export class AuthService {
             }
         })
         if(!employee) throw new NotFoundException(
-            "User with this username already exists"
+            "User not found"
             )
         const isValid = await verify(employee.password, 
             dto.password)
