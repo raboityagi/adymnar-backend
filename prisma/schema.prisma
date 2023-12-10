@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student{
+  id  Int @id @default(autoincrement())
+  classId Int @map("class_id")
+  login String @unique
+  password String
+  name String
+  surname String
+  midname String
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  avatarPath String @default("c:\\Users\\danil\\OneDrive\\Изображения\\1.png")
+  @@map("student_avatar_path")
+
+  class Class @relation(fields: [classId],references: [id])
+}
+model Class{
+  id Int @id @default(autoincrement())
+  employeeId Int @map("employee_id")
+  student Student[]
+  schedule Schedule[]
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  schoolEmployee SchoolEmployee @relation(fields: [employeeId],references: [id])
+}
+
+model SchoolEmployee{
+  id  Int @id @default(autoincrement()) 
+  postId Int @map("post_id")
+  login String @unique
+  password String
+  name String
+  surname String
+  midname String
+  class Class[]
+  subject Subject[]
+  event Event[]
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  avatarPath String @default("c:\\Users\\danil\\OneDrive\\Изображения\\1.png")
+  @@map("employee_avatar_path")
+
+  post Post @relation(fields: [postId], references: [id])
+}
+
+model Post{
+  id Int @id @default(autoincrement())
+  name String @unique
+  schoolEmployee SchoolEmployee[]
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+}
+
+model Subject{
+  id Int @id @default(autoincrement())
+  schoolEmployeeId Int @map("school_employee_id")
+  scheduleId Int @map("schedule_id")
+  name String @unique
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  
+  schoolEmployee SchoolEmployee @relation(fields: [schoolEmployeeId],references: [id])
+  schedule Schedule @relation(fields: [scheduleId],references: [id])
+}
+
+model Schedule{
+  id Int @id @default(autoincrement())
+  date DateTime
+  classId Int @map("class_id")
+  subjects Subject[]
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  class Class @relation(fields: [classId], references: [id])
+}
+
+model Event{
+  id Int @id @default(autoincrement())
+  schoolEmployeeId Int @map("school_employee_id")
+  name String
+  description String
+  place String
+  date DateTime
+
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  schoolEmployee SchoolEmployee @relation(fields: [schoolEmployeeId],references: [id])
+}
