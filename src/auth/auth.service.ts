@@ -92,6 +92,7 @@ export class AuthService {
     if (oldUser)
       throw new BadRequestException("User with this username already exists");
 
+<<<<<<< HEAD
     const student = await this.prisma.student.create({
       data: {
         classId: 1,
@@ -163,4 +164,43 @@ export class AuthService {
 
     return employee;
   }
+=======
+    private returnEmployeeFields(employee:SchoolEmployee){
+        return{
+            id:employee.id,
+            login:employee.login,
+        }
+    }
+     private async validateStudent(dto:AuthDto){
+        const student = await this.prisma.student.findUnique({
+            where:{
+                login: dto.login
+            }
+        })
+        if(!student) throw new NotFoundException(
+            "User not found"
+            )
+        const isValid = await verify(student.password, 
+            dto.password)
+        if(!isValid) throw new UnauthorizedException('Invalid password')
+        
+        return student
+     }
+
+     private async validateEmployee(dto:AuthDto){
+        const employee = await this.prisma.schoolEmployee.findUnique({
+            where:{
+                login: dto.login
+            }
+        })
+        if(!employee) throw new NotFoundException(
+            "User not found"
+            )
+        const isValid = await verify(employee.password, 
+            dto.password)
+        if(!isValid) throw new UnauthorizedException('Invalid password')
+        
+        return employee
+     }
+>>>>>>> f21ec848fef8cbd41a05558ec1ea780aed35e2cb
 }
