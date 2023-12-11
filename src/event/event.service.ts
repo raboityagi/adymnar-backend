@@ -11,7 +11,7 @@ export class EventService {
 	}
 
 	async findToday() {
-		const today = new Date().toISOString().slice(0, 10)
+		const today = new Date().toISOString()
 
 		return this.prisma.event.findMany({
 			where: {
@@ -23,13 +23,21 @@ export class EventService {
 	}
 
 	async findExpired() {
-		const today = new Date().toISOString().slice(0, 10)
+		const today = new Date().toISOString()
 
 		return this.prisma.event.findMany({
 			where: {
 				date: {
 					lt: today,
 				},
+			},
+		})
+	}
+
+	async findById(id: number) {
+		return this.prisma.event.findUnique({
+			where: {
+				id: id,
 			},
 		})
 	}
@@ -57,6 +65,9 @@ export class EventService {
 	}
 
 	async update(dto: EventDto & EventDtoForUpdate, id: number) {
+		if (!id || id === undefined)
+			throw new BadRequestException('You are not allowed to be here')
+
 		return this.prisma.event.update({
 			where: {
 				id: dto.id,

@@ -3,6 +3,7 @@ import {
 	Controller,
 	Get,
 	HttpCode,
+	Param,
 	Patch,
 	Post,
 	UseGuards,
@@ -42,5 +43,10 @@ export class EventController {
 	@Get('/today')
 	findToday() {
 		return this.eventService.findToday()
+	}
+
+	@Get('/byId/:id')
+	findById(@Param() id: string) {
+		return this.eventService.findById(+id)
 	}
 }

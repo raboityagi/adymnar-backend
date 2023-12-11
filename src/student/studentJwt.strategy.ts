@@ -6,7 +6,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 import { PrismaService } from 'src/prisma.service'
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class StudentJwtStrategy extends PassportStrategy(Strategy) {
 	constructor(
 		private configService: ConfigService,
 		private prisma: PrismaService
